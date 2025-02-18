@@ -2,7 +2,7 @@ name: Schedule Script
 
 on:
   schedule:
-    - cron: '10 20 * * *'
+    - cron: '*/5 * * * *'
   workflow_dispatch:  # Allows manual triggering from GitHub Actions UI
 
 jobs:
