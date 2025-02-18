@@ -2,7 +2,7 @@ name: Schedule Script
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Runs every day at 20:00 UTC
+    - cron: '0 0 * * *'
   workflow_dispatch:  # Allows manual triggering from GitHub Actions UI
 
 jobs:
@@ -16,12 +16,12 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v3
       with:
-        python-version: '3.8'  # Adjust to match your MacBook's Python version
+        python-version: '3.8'
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        pip install -r requirements.txt
 
     - name: Run script
-      run: python notification.py  # Replace with your actual script filename
+      run: python notification.py
