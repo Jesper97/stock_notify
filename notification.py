@@ -1,17 +1,38 @@
-import yfinance as yf
+from alpha_vantage.timeseries import TimeSeries
 import matplotlib.pyplot as plt
+import pandas as pd
+import smtplib
 
-import smtplib  
 from email.mime.text import MIMEText  
 from email.mime.multipart import MIMEMultipart  
 from email.mime.base import MIMEBase
 from email import encoders
 import os
 
+ALPHA_VANTAGE_API_KEY = os.getenv("ALPHA_VANTAGE_API_KEY")
+if not ALPHA_VANTAGE_API_KEY:
+    raise ValueError("API key not found. Make sure it's set in the environment.")
+
 
 def get_data(ticker_name):
-    ticker = yf.Ticker(ticker_name)
-    return ticker.history(period='2y')
+    ts = TimeSeries(key=ALPHA_VANTAGE_API_KEY, output_format='pandas')
+    data, _ = ts.get_daily(symbol=ticker_name, outputsize='full')
+
+    data = data.rename(columns={
+        "1. open": "Open",
+        "2. high": "High",
+        "3. low": "Low",
+        "4. close": "Close",
+        "5. volume": "Volume"
+    })
+
+    data.index = pd.to_datetime(data.index)
+    data = (
+        data.loc[data.index >= pd.Timestamp.today() - pd.DateOffset(years=2)]
+        .iloc[::-1]
+    )
+
+    return data
 
 
 def calculate_moving_avg(data, window=200):
@@ -96,4 +117,4 @@ def run_script(ticker_name, window):
 
 
 if __name__ == "__main__":
-    run_script(ticker_name = '^GSPC', window=200)
+    run_script(ticker_name = 'SPY', window=200)

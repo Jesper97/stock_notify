@@ -23,5 +23,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r $GITHUB_WORKSPACE/requirements.txt
 
-    - name: Run script
+    - name: Run notification script
+      env:
+        ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
       run: python notification.py
