@@ -135,7 +135,7 @@ def send_email(subject, body, to_email, attachment_path, is_html=True):
         encoders.encode_base64(part)
         part.add_header('Content-Disposition', f"attachment; filename= {os.path.basename(attachment_path)}")
         msg.attach(part)
-  
+
     try:
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
