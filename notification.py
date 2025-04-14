@@ -98,6 +98,7 @@ def check_drawdown_breach(price_series):
 
 
 def generate_fig(data, window, ticker_name):
+    data = data.dropna(subset=["MA"])
     data[["Close", "MA"]].plot()
 
     # Add a dot at the last data point of "Close"
