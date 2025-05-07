@@ -99,12 +99,18 @@ def check_drawdown_breach(price_series):
 
 def generate_fig(data, window, ticker_name):
     data = data.dropna(subset=["MA"])
-    data[["Close", "MA"]].plot()
+    plt.plot(data.index, data["Close"], label="Close", color="blue")  # or default color
+    plt.plot(data.index, data["MA"], label=f"{window}-day MA", color="orange")
+
+    # Highlight the last 'window' Close values in green
+    if len(data) >= window:
+        recent_data = data.iloc[-window:]
+        plt.plot(recent_data.index, recent_data["Close"], color="green", linewidth=2)
 
     # Add a dot at the last data point of "Close"
     last_date = data.index[-1]
     last_close = data["Close"].iloc[-1]
-    plt.plot(last_date, last_close, 'o', color='black', markersize=8, label='Last Close')
+    plt.plot(last_date, last_close, 'o', color='black', markersize=6, label='Last Close')
 
     plt.title(f"{ticker_name} \n{data.index[-1].date()}")
     plt.legend([f"{ticker_name}", f"{window}-day MA"])
