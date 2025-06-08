@@ -22,8 +22,8 @@ EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
 BTD_POSITIONS = pd.DataFrame(
     {
-        "Investment": [288.96, 501.18],
-        "Buy price": [96.32, 83.53]
+        "Investment": [288.96],
+        "Buy price": [96.32]
     }
 )
 
@@ -186,11 +186,11 @@ def create_and_send_email(data, table, window, ticker_name1, ticker_name2, recip
         return_msg = f"<p><b>One of your BTD positions in {ticker_name2} has returned more than 20%. Please close the position.</b></p>"
 
     # ==== DRAWDOWN MESSAGE ====
-    dd_msg = f"<p>Current drawdown {ticker_name2} from all-time high: <b>{current_drawdown:.1f}%</b></p>"
+    dd_msg = f"<p>Current drawdown {ticker_name2} from all-time high: {current_drawdown:.1f}%</p>"
     if dd_breach and dd_level is not None:
         dd_msg += (
-            f"<p><b>{ticker_name2} has dropped more than {dd_level}% from its all-time high. "
-            f"Please evaluate whether to buy the dip.</b></p>"
+            f"<p>{ticker_name2} has dropped more than {dd_level}% from its all-time high. "
+            f"Please evaluate whether to buy the dip.</p>"
         )
 
     # ==== TABLE ====
@@ -200,11 +200,13 @@ def create_and_send_email(data, table, window, ticker_name1, ticker_name2, recip
     body = f"""
     <html>
         <body>
-            <p>{ma_msg}</p>
+            <p><b>MSCI World:</p></b>
             {return_msg}
             {dd_msg}
-            <p><b>Positions Summary:</b></p>
+            <p>Positions Summary:</p>
             {table_html}
+            <p><b>S&P 500:</p></b>
+            <p>{ma_msg}</p>
         </body>
     </html>
     """
